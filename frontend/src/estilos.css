@@ -66,6 +66,8 @@ body, button, input, select, textarea { font-family: "Inter Tight", sans-serif; 
 }
 
 .folder-nav::-webkit-scrollbar { display: none; }
+.folder-tabs { display: flex; align-items: flex-end; gap: 4px; }
+.folder-mobile-toggle { display: none; }
 
 .folder-tab {
   position: relative;
@@ -215,6 +217,28 @@ body, button, input, select, textarea { font-family: "Inter Tight", sans-serif; 
 .clickable-row:hover { background: rgb(232 114 12 / 15%); }
 .clickable-row:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
 .clickable-row td a { position: relative; z-index: 1; }
+.action-links, .detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.detail-actions { grid-column: 1 / -1; margin: 8px 0 24px; }
+.link-accion {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  color: var(--ink);
+  border: var(--line);
+  background: var(--paper);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.link-accion--editar { background: var(--blue); }
+.link-accion--primary { background: var(--orange); }
+.link-accion:hover { color: var(--paper); background: var(--ink); }
+.detail-actions__secondary { grid-column: 1 / -1; }
 
 .form-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .tarjeta--lamina form .form-actions { grid-column: 1 / -1; width: 100%; }
@@ -420,8 +444,45 @@ li::before { content: "- "; font-weight: 900; }
 
 @media (max-width: 640px) {
   :root { --frame: 16px; }
-  .folder-nav { scroll-snap-type: x mandatory; padding-right: 16px; padding-left: 16px; }
-  .folder-tab { scroll-snap-align: start; }
+  .folder-nav { display: block; overflow: visible; padding: 10px 16px 0; }
+  .folder-mobile-toggle {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: -2px;
+    padding: 12px 20px;
+    color: var(--ink);
+    border: var(--line);
+    border-bottom: 0;
+    background: var(--paper);
+    clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 100%, 0 100%);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .folder-mobile-toggle::before { content: attr(data-number); color: var(--blue); font-size: 10px; }
+  .folder-mobile-toggle span { margin-left: auto; font-size: 18px; line-height: 1; }
+  .folder-mobile-toggle:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .folder-tabs { display: none; position: absolute; top: 100%; right: 16px; left: 16px; z-index: 3; flex-direction: column; gap: 0; padding: 8px; border: var(--line); background: var(--paper); box-shadow: 6px 6px 0 var(--ink); }
+  .folder-tabs--open { display: flex; }
+  .folder-tabs .folder-tab,
+  .folder-tabs .folder-tab[aria-current="page"] {
+    width: 100%;
+    min-height: 44px;
+    margin: 0;
+    justify-content: flex-start;
+    clip-path: none;
+    border: var(--line);
+    border-bottom: 0;
+  }
+  .folder-tabs .folder-tab:last-child { border-bottom: var(--line); }
+  .folder-tabs .folder-tab[aria-current="page"] { background: var(--paper-2); }
+  .folder-tabs .folder-tab:hover { transform: none; }
   .tarjeta--lamina, #root > p { width: calc(100% - 32px); min-height: calc(100vh - 96px); margin: 0 auto 32px; }
   .context-bar { padding-bottom: 12px; }
   .context-back { width: 100%; }
@@ -434,6 +495,10 @@ li::before { content: "- "; font-weight: 900; }
   .intro__stats { margin: 8px 0 0; }
   .intro__actions { display: grid; }
   .form-actions { flex-direction: column; align-items: stretch; }
+  .action-links { align-items: stretch; }
+  .action-links .link-accion { flex: 1; }
+  .detail-actions { align-items: stretch; }
+  .detail-actions > * { flex: 1; }
   .confirm-modal .form-actions { flex-direction: column-reverse; }
   h1 { font-size: clamp(2.5rem, 14vw, 4rem); }
   h2 { font-size: 2rem; }

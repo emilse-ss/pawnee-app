@@ -67,10 +67,6 @@ export function DetalleCriatura() {
 
   return (
     <Tarjeta variante="lamina" miga={criatura.nombre}>
-      <p>
-        <Link to="/">Volver a la lista</Link>
-      </p>
-
       <div className="section-heading">
         <h1>{criatura.nombre}</h1>
         <SectionIllustration kind="creatures" />
@@ -83,18 +79,17 @@ export function DetalleCriatura() {
         <li>Habilidades: {criatura.habilidades.join(", ") || "(ninguna registrada)"}</li>
       </ul>
 
-      <p>
-        <Link to={`/criaturas/${criatura._id}/editar`}>Editar</Link>
-        {" | "}
+      <div className="detail-actions">
+        <Link className="link-accion link-accion--editar" to={`/criaturas/${criatura._id}/editar`}>Editar</Link>
           <Boton type="button" variante="peligro" onClick={() => setConfirmarBorrado(true)}>
           Eliminar
           </Boton>
-      </p>
+      </div>
 
       <h2>Avistamientos registrados</h2>
 
-      <p>
-        <Link to={`/avistamientos/nuevo?criaturaId=${criatura._id}`}>Registrar un avistamiento de esta criatura</Link>
+      <p className="detail-actions__secondary">
+        <Link className="link-accion link-accion--primary" to={`/avistamientos/nuevo?criaturaId=${criatura._id}`}>Registrar un avistamiento de esta criatura</Link>
       </p>
 
       {avistamientos.length === 0 ? (

@@ -53,12 +53,6 @@ export function ListaAvistamientos() {
         <SectionIllustration kind="sightings" />
       </div>
 
-      <p>
-        <Link to="/">Volver a criaturas</Link>
-        {" · "}
-        <Link to="/avistamientos/nuevo">Registrar avistamiento nuevo</Link>
-      </p>
-
       {cargando && <Aviso>Cargando avistamientos...</Aviso>}
       {!cargando && error && <Aviso variante="error">Error: {error}</Aviso>}
       {!cargando && !error && avistamientos.length === 0 && <Aviso variante="vacio">Todavía no hay avistamientos registrados.</Aviso>}
@@ -79,7 +73,7 @@ export function ListaAvistamientos() {
               <tr key={avistamiento._id}>
                 <td>{avistamiento.fecha.slice(0, 10)}</td>
                 <td>
-                  <Link to={`/criaturas/${avistamiento.criatura._id}`}>{avistamiento.criatura.nombre}</Link>
+                  <Link className="link-accion link-accion--ver" to={`/criaturas/${avistamiento.criatura._id}`}>{avistamiento.criatura.nombre}</Link>
                 </td>
                 <td>{avistamiento.testigo}</td>
                 <td>{avistamiento.ubicacion}</td>

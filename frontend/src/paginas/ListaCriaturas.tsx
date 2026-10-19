@@ -66,12 +66,6 @@ export function ListaCriaturas() {
         <Link className="boton boton--secundario" to="/avistamientos/nuevo">Registrar avistamiento</Link>
       </div>
 
-      <p>
-        <Link to="/criaturas/nueva">Registrar criatura nueva</Link>
-        {" · "}
-        <Link to="/avistamientos">Ver avistamientos</Link>
-      </p>
-
       <h2 id="catalogo">Catálogo de criaturas</h2>
       <label htmlFor="filtro-tipo">Filtrar por tipo: </label>
       <select
@@ -122,9 +116,10 @@ export function ListaCriaturas() {
                 <td>{criatura.nivelPeligro}</td>
                 <td>{criatura.estado}</td>
                 <td>
-                  <Link onClick={(evento) => evento.stopPropagation()} to={`/criaturas/${criatura._id}`}>Ver</Link>
-                  {" | "}
-                  <Link onClick={(evento) => evento.stopPropagation()} to={`/criaturas/${criatura._id}/editar`}>Editar</Link>
+                  <div className="action-links">
+                    <Link className="link-accion link-accion--ver" onClick={(evento) => evento.stopPropagation()} to={`/criaturas/${criatura._id}`}>Ver</Link>
+                    <Link className="link-accion link-accion--editar" onClick={(evento) => evento.stopPropagation()} to={`/criaturas/${criatura._id}/editar`}>Editar</Link>
+                  </div>
                 </td>
               </tr>
             ))}
