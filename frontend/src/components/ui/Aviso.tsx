@@ -1,9 +1,9 @@
 import { HTMLAttributes } from "react";
 
 interface AvisoProps extends HTMLAttributes<HTMLParagraphElement> {
-  variante?: "info" | "error" | "vacio";
+  variante?: "info" | "error" | "exito" | "vacio";
 }
 
 export function Aviso({ variante = "info", className = "", ...props }: AvisoProps) {
-  return <p className={`aviso aviso--${variante} ${className}`.trim()} {...props} />;
+  return <p className={`aviso aviso--${variante} ${className}`.trim()} role={variante === "error" || variante === "exito" ? "alert" : undefined} {...props} />;
 }

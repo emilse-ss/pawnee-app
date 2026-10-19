@@ -13,6 +13,8 @@ import { Criatura } from "../tipos";
 import { Aviso } from "../components/ui/Aviso";
 import { Boton } from "../components/ui/Boton";
 import { Tarjeta } from "../components/ui/Tarjeta";
+import { ConfirmacionModal } from "../components/ui/ConfirmacionModal";
+import { SectionIllustration } from "../components/SectionIllustration";
 
 // El backend anida los avistamientos bajo /criaturas/:id/avistamientos
 // SIN populate (ver criaturas.controller.ts de la Semana 6) — por eso aquí
@@ -33,6 +35,7 @@ export function DetalleCriatura() {
   const [avistamientos, setAvistamientos] = useState<AvistamientoSinPopular[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [confirmarBorrado, setConfirmarBorrado] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -48,13 +51,13 @@ export function DetalleCriatura() {
 
   async function manejarEliminar() {
     if (!id) return;
-    if (!window.confirm("¿Seguro que quieres eliminar esta criatura?")) return;
 
     try {
       await eliminarCriatura(id);
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo eliminar la criatura.");
+      setConfirmarBorrado(false);
     }
   }
 
@@ -63,12 +66,15 @@ export function DetalleCriatura() {
   if (!criatura) return <Tarjeta variante="lamina"><Aviso variante="vacio">No se encontró la criatura.</Aviso></Tarjeta>;
 
   return (
-    <Tarjeta variante="lamina">
+    <Tarjeta variante="lamina" miga={criatura.nombre}>
       <p>
         <Link to="/">Volver a la lista</Link>
       </p>
 
-      <h1>{criatura.nombre}</h1>
+      <div className="section-heading">
+        <h1>{criatura.nombre}</h1>
+        <SectionIllustration kind="creatures" />
+      </div>
 
       <ul>
         <li>Tipo: {criatura.tipo}</li>
@@ -80,7 +86,7 @@ export function DetalleCriatura() {
       <p>
         <Link to={`/criaturas/${criatura._id}/editar`}>Editar</Link>
         {" | "}
-          <Boton type="button" variante="peligro" onClick={manejarEliminar}>
+          <Boton type="button" variante="peligro" onClick={() => setConfirmarBorrado(true)}>
           Eliminar
           </Boton>
       </p>
@@ -102,6 +108,13 @@ export function DetalleCriatura() {
             </li>
           ))}
         </ul>
+      )}
+      {confirmarBorrado && (
+        <ConfirmacionModal
+          mensaje="¿Seguro que quieres eliminar esta criatura?"
+          onCancelar={() => setConfirmarBorrado(false)}
+          onConfirmar={manejarEliminar}
+        />
       )}
     </Tarjeta>
   );

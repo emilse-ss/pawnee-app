@@ -13,6 +13,7 @@ import { AvistamientoFormulario, Criatura } from "../tipos";
 import { Aviso } from "../components/ui/Aviso";
 import { Boton } from "../components/ui/Boton";
 import { Tarjeta } from "../components/ui/Tarjeta";
+import { SectionIllustration } from "../components/SectionIllustration";
 
 const FORM_VACIO: AvistamientoFormulario = {
   criatura: "",
@@ -60,7 +61,7 @@ export function FormularioAvistamiento() {
     try {
       setGuardando(true);
       await crearAvistamiento(form);
-      navigate("/avistamientos");
+      navigate("/avistamientos", { state: { mensajeExito: "Avistamiento registrado correctamente." } });
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo registrar el avistamiento.");
     } finally {
@@ -72,9 +73,11 @@ export function FormularioAvistamiento() {
 
   return (
     <Tarjeta variante="lamina">
-      <h1>Registrar avistamiento</h1>
-
       {error && <Aviso variante="error">Error: {error}</Aviso>}
+      <div className="section-heading">
+        <h1>Registrar avistamiento</h1>
+        <SectionIllustration kind="report" />
+      </div>
 
       <form onSubmit={manejarEnvio}>
         <p>
@@ -137,9 +140,12 @@ export function FormularioAvistamiento() {
           />
         </p>
 
-        <p>
+        <p className="form-actions">
           <Boton type="submit" disabled={guardando}>
             {guardando ? "Guardando..." : "Registrar avistamiento"}
+          </Boton>
+          <Boton type="button" variante="secundario" onClick={() => navigate("/avistamientos")}>
+            Cancelar
           </Boton>
         </p>
       </form>

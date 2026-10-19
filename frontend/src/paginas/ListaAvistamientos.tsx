@@ -12,11 +12,14 @@ import { Avistamiento } from "../tipos";
 import { Aviso } from "../components/ui/Aviso";
 import { Boton } from "../components/ui/Boton";
 import { Tarjeta } from "../components/ui/Tarjeta";
+import { ConfirmacionModal } from "../components/ui/ConfirmacionModal";
+import { SectionIllustration } from "../components/SectionIllustration";
 
 export function ListaAvistamientos() {
   const [avistamientos, setAvistamientos] = useState<Avistamiento[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [avistamientoPendiente, setAvistamientoPendiente] = useState<string | null>(null);
 
   function cargar() {
     setCargando(true);
@@ -31,19 +34,24 @@ export function ListaAvistamientos() {
     cargar();
   }, []);
 
-  async function manejarEliminar(id: string) {
-    if (!window.confirm("¿Eliminar este avistamiento?")) return;
+  async function confirmarEliminar() {
+    if (!avistamientoPendiente) return;
     try {
-      await eliminarAvistamiento(id);
+      await eliminarAvistamiento(avistamientoPendiente);
+      setAvistamientoPendiente(null);
       cargar();
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo eliminar el avistamiento.");
+      setAvistamientoPendiente(null);
     }
   }
 
   return (
     <Tarjeta variante="lamina">
-      <h1>Avistamientos registrados</h1>
+      <div className="section-heading">
+        <h1>Avistamientos registrados</h1>
+        <SectionIllustration kind="sightings" />
+      </div>
 
       <p>
         <Link to="/">Volver a criaturas</Link>
@@ -76,7 +84,7 @@ export function ListaAvistamientos() {
                 <td>{avistamiento.testigo}</td>
                 <td>{avistamiento.ubicacion}</td>
                 <td>
-                  <Boton type="button" variante="peligro" tamano="sm" onClick={() => manejarEliminar(avistamiento._id)}>
+                  <Boton type="button" variante="peligro" tamano="sm" onClick={() => setAvistamientoPendiente(avistamiento._id)}>
                     Eliminar
                   </Boton>
                 </td>
@@ -84,6 +92,13 @@ export function ListaAvistamientos() {
             ))}
           </tbody>
         </table>
+      )}
+      {avistamientoPendiente && (
+        <ConfirmacionModal
+          mensaje="¿Eliminar este avistamiento?"
+          onCancelar={() => setAvistamientoPendiente(null)}
+          onConfirmar={confirmarEliminar}
+        />
       )}
     </Tarjeta>
   );

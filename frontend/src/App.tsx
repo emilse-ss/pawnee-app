@@ -5,6 +5,7 @@
  */
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { FolderNavigation } from "./components/FolderNavigation";
 import { ListaCriaturas } from "./paginas/ListaCriaturas";
 import { DetalleCriatura } from "./paginas/DetalleCriatura";
 import { FormularioCriatura } from "./paginas/FormularioCriatura";
@@ -14,6 +15,8 @@ import { FormularioAvistamiento } from "./paginas/FormularioAvistamiento";
 export default function App() {
   return (
     <BrowserRouter>
+      <a className="skip-link" href="#main-content">Saltar al contenido</a>
+      <FolderNavigation />
       <Routes>
         <Route path="/" element={<ListaCriaturas />} />
         <Route path="/criaturas/nueva" element={<FormularioCriatura />} />

@@ -11,6 +11,7 @@ import { CriaturaFormulario, TIPOS_CRIATURA, ESTADOS_INVESTIGACION } from "../ti
 import { Aviso } from "../components/ui/Aviso";
 import { Boton } from "../components/ui/Boton";
 import { Tarjeta } from "../components/ui/Tarjeta";
+import { SectionIllustration } from "../components/SectionIllustration";
 
 const FORM_VACIO: CriaturaFormulario = {
   nombre: "",
@@ -73,7 +74,7 @@ export function FormularioCriatura() {
       } else {
         await crearCriatura(datosAEnviar);
       }
-      navigate("/");
+      navigate("/", { state: { mensajeExito: esEdicion ? "Criatura actualizada correctamente." : "Criatura registrada correctamente." } });
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo guardar la criatura.");
     } finally {
@@ -84,10 +85,12 @@ export function FormularioCriatura() {
   if (cargando) return <Tarjeta variante="lamina"><Aviso>Cargando datos de la criatura...</Aviso></Tarjeta>;
 
   return (
-    <Tarjeta variante="lamina">
-      <h1>{esEdicion ? "Editar criatura" : "Registrar criatura nueva"}</h1>
-
+    <Tarjeta variante="lamina" miga={esEdicion ? form.nombre : undefined}>
       {error && <Aviso variante="error">Error: {error}</Aviso>}
+      <div className="section-heading">
+        <h1>{esEdicion ? "Editar criatura" : "Registrar criatura nueva"}</h1>
+        <SectionIllustration kind="new-creature" />
+      </div>
 
       <form onSubmit={manejarEnvio}>
         <p>
@@ -157,9 +160,12 @@ export function FormularioCriatura() {
           </select>
         </p>
 
-        <p>
+        <p className="form-actions">
           <Boton type="submit" disabled={guardando}>
             {guardando ? "Guardando..." : esEdicion ? "Guardar cambios" : "Crear criatura"}
+          </Boton>
+          <Boton type="button" variante="secundario" onClick={() => navigate(esEdicion && id ? `/criaturas/${id}` : "/")}>
+            Cancelar
           </Boton>
         </p>
       </form>
